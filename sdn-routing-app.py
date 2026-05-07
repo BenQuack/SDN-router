@@ -85,7 +85,7 @@ def main():
     # get_request = requests.get(f'http://sdn.cs3650.org/get_topology/topology1')
     
     try:
-        get_request = requests.get(f'http://sdn.cs3650.org/get_topology/{sys.argv[0]}')
+        get_request = requests.get(f'http://sdn.cs3650.org/get_topology/{sys.argv[1]}')
         print(get_request.status_code)
     except requests.exceptions.Timeout:
         print("The request timed out")
