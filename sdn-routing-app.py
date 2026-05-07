@@ -74,18 +74,18 @@ def scan(switches:dict) -> str:
 
 def main():
     
-    if len(sys.argv) != 2:
+    if len(sys.argv) != 3:
         if len(sys.argv) == 1:
-            print("agrument expected after sdn-routing-app.py <network to scan>")
+            print("agrument expected after sdn-routing-app.py <network> <sdn choice>")
             return ValueError
         else:
-            print("no agrument(s) expected after sdn-routing-app.py other than <network to scan>")
+            print("no agrument(s) expected after sdn-routing-app.py other than <network> <sdn choice>")
     
     
     # get_request = requests.get(f'http://sdn.cs3650.org/get_topology/topology1')
     
     try:
-        get_request = requests.get(f'http://sdn.cs3650.org/get_topology/{sys.argv[1]}')
+        get_request = requests.get(f'http://{sys.argv[1]}/get_topology/{sys.argv[2]}')
         print(get_request.status_code)
     except requests.exceptions.Timeout:
         print("The request timed out")
@@ -93,7 +93,7 @@ def main():
     topology_text = get_request.text
     topology_dict = format_topology(topology_text)
     switch_tables_dict = scan(topology_dict)
-    response = requests.post("http://sdn.cs3650.org/set_tables/topology1",json=switch_tables_dict)
+    response = requests.post(f"http://{sys.argv[1]}/set_tables/{sys.argv[2]}",json=switch_tables_dict)
     if response.status_code // 100 == 2: # check for a successfull response 
         print("data sent successfully")
     else:
